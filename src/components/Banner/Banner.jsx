@@ -1,5 +1,5 @@
 import React from 'react';
-import Snowfall from 'react-snowfall';
+import BurstEffect from '../Effects/BurstEffect';
 
 const greetings = [
   "Chúc mừng Giáng sinh an lành!",
@@ -19,7 +19,6 @@ const Banner = () => {
 
   return (
     <div className="relative h-[80vh] overflow-hidden">
-      <Snowfall snowflakeCount={200} />
       <div className="carousel w-full h-full">
         <div className="carousel-item relative w-full">
           <div className="absolute inset-0 bg-gradient-to-r from-christmas-red/50 to-christmas-green/50" />
@@ -29,9 +28,11 @@ const Banner = () => {
             alt="Christmas Banner"
           />
           <div className="absolute flex flex-col items-center justify-center inset-0 bg-black bg-opacity-30">
-            <h1 className="text-6xl md:text-8xl text-white font-christmas font-bold mb-6 animate-bounce">
-              {greetings[currentGreeting]}
-            </h1>
+            <BurstEffect>
+              <h1 className="text-6xl md:text-8xl text-white font-christmas font-bold mb-6">
+                {greetings[currentGreeting]}
+              </h1>
+            </BurstEffect>
             <p className="text-2xl md:text-4xl text-christmas-gold font-christmas">
               Mùa của yêu thương và sẻ chia
             </p>

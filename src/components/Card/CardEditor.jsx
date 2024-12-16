@@ -3,51 +3,22 @@ import { FaDownload, FaShare, FaFacebook } from 'react-icons/fa';
 import * as htmlToImage from 'html-to-image';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import BurstEffect from '../Effects/BurstEffect';
 
 const CardEditor = ({ card, onBack }) => {
   const [customText, setCustomText] = useState('<p>Chúc mừng Giáng sinh!</p>');
-  const [selectedFont, setSelectedFont] = useState('font-christmas');
+  const [selectedFont, setSelectedFont] = useState('font-dancing');
   const [textColor, setTextColor] = useState('#D42F2F');
   const [fontSize, setFontSize] = useState('40');
   const cardRef = useRef(null);
   
   const fonts = [
-    { 
-      id: 'font-christmas', 
-      name: 'Dancing Script', 
-      family: "'Dancing Script', cursive",
-      preview: 'Merry Christmas'
-    },
-    { 
-      id: 'font-greatVibes', 
-      name: 'Great Vibes', 
-      family: "'Great Vibes', cursive",
-      preview: 'Merry Christmas'
-    },
-    { 
-      id: 'font-pacifico', 
-      name: 'Pacifico', 
-      family: "'Pacifico', cursive",
-      preview: 'Merry Christmas'
-    },
-    { 
-      id: 'font-lobster', 
-      name: 'Lobster', 
-      family: "'Lobster', cursive",
-      preview: 'Merry Christmas'
-    },
-    { 
-      id: 'font-sans', 
-      name: 'Nunito', 
-      family: "'Nunito', sans-serif",
-      preview: 'Merry Christmas'
-    },
-    { 
-      id: 'font-serif', 
-      name: 'Serif', 
-      family: "serif",
-      preview: 'Merry Christmas'
-    },
+    { id: 'font-dancing', name: 'Dancing Script', family: "'Dancing Script', cursive" },
+    { id: 'font-great-vibes', name: 'Great Vibes', family: "'Great Vibes', cursive" },
+    { id: 'font-pacifico', name: 'Pacifico', family: "'Pacifico', cursive" },
+    { id: 'font-lobster', name: 'Lobster', family: "'Lobster', cursive" },
+    { id: 'font-sans', name: 'Nunito', family: "'Nunito', sans-serif" },
+    { id: 'font-serif', name: 'Serif', family: "serif" },
   ];
 
   // Cấu hình cho React-Quill
@@ -144,27 +115,21 @@ const CardEditor = ({ card, onBack }) => {
             <label className="font-christmas text-2xl text-christmas-red block mb-2">
               Font chữ
             </label>
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               {fonts.map(font => (
-                <div
+                <button
                   key={font.id}
                   onClick={() => setSelectedFont(font.id)}
-                  className={`cursor-pointer p-3 rounded-lg border-2 transition-all ${
+                  className={`p-3 rounded-lg border-2 transition-all ${
                     selectedFont === font.id
-                      ? 'border-christmas-red bg-christmas-red/5'
+                      ? 'border-christmas-red bg-christmas-red/10'
                       : 'border-gray-200 hover:border-christmas-red/50'
                   }`}
+                  style={{ fontFamily: font.family }}
                 >
-                  <div
-                    className="text-xl"
-                    style={{ fontFamily: font.family }}
-                  >
-                    {font.preview}
-                  </div>
-                  <div className="text-sm text-gray-500 mt-1">
-                    {font.name}
-                  </div>
-                </div>
+                  <span className="text-xl">Aa</span>
+                  <p className="text-sm mt-1">{font.name}</p>
+                </button>
               ))}
             </div>
           </div>
@@ -199,18 +164,22 @@ const CardEditor = ({ card, onBack }) => {
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-4">
-            <button
-              onClick={handleDownload}
-              className="btn btn-primary font-christmas text-xl gap-2"
-            >
-              <FaDownload /> Tải về
-            </button>
-            <button
-              onClick={handleShareFacebook}
-              className="btn bg-[#1877F2] hover:bg-[#1877F2]/90 text-white font-christmas text-xl gap-2"
-            >
-              <FaFacebook /> Chia sẻ Facebook
-            </button>
+            <BurstEffect>
+              <button
+                onClick={handleDownload}
+                className="btn btn-primary font-christmas text-xl gap-2"
+              >
+                <FaDownload /> Tải về
+              </button>
+            </BurstEffect>
+            <BurstEffect>
+              <button
+                onClick={handleShareFacebook}
+                className="btn bg-[#1877F2] hover:bg-[#1877F2]/90 text-white font-christmas text-xl gap-2"
+              >
+                <FaFacebook /> Chia sẻ Facebook
+              </button>
+            </BurstEffect>
           </div>
 
           <button

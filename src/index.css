@@ -75,3 +75,21 @@ body {
 .ql-formats button:not(.ql-bold):not(.ql-italic):not(.ql-underline):not(.ql-strike):not(.ql-list):not(.ql-align) {
   display: none !important;
 }
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10vh) translateX(0);
+  }
+  100% {
+    transform: translateY(110vh) translateX(20px);
+  }
+}
+
+.loading-snow {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  animation: snowfall 3s linear infinite;
+}

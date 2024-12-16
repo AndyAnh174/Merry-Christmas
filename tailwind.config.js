@@ -15,9 +15,6 @@ export default {
       },
       fontFamily: {
         christmas: ['Dancing Script', 'cursive'],
-        greatVibes: ['Great Vibes', 'cursive'],
-        pacifico: ['Pacifico', 'cursive'],
-        lobster: ['Lobster', 'cursive'],
         sans: ['Nunito', 'sans-serif'],
       }
     },
