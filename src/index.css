@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Nunito', sans-serif;
+}
+
+.christmas-font {
+  font-family: 'Dancing Script', cursive;
+}
+
+/* Xóa tất cả các style khác */
+
+.reactEasyCrop_Container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+  cursor: move;
+  z-index: 0;
+}
+
+.reactEasyCrop_Image,
+.reactEasyCrop_CropArea {
+  z-index: 0;
+}
+
+.frame-overlay {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.quill-content {
+  width: 100%;
+  text-align: center;
+}
+
+.quill-content p {
+  margin: 0;
+}
+
+.quill-content ul,
+.quill-content ol {
+  text-align: left;
+  display: inline-block;
+}
+
+/* Tùy chỉnh thanh công cụ Quill */
+.ql-toolbar.ql-snow {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background-color: #f8f9fa;
+}
+
+.ql-container.ql-snow {
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  min-height: 120px;
+}
+
+/* Ẩn một số nút không cần thiết */
+.ql-formats button:not(.ql-bold):not(.ql-italic):not(.ql-underline):not(.ql-strike):not(.ql-list):not(.ql-align) {
+  display: none !important;
+}
