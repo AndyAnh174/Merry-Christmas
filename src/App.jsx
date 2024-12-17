@@ -66,7 +66,7 @@ function App() {
                     </p>
                     <p className="text-center text-sm opacity-90">
                       Developed with ❤️ by{' '}
-                      <span className="font-semibold">AndyAnh - Quốc Anh - Minh Quân</span>
+                      <span className="font-semibold"><a href="https://myportfolio-andyanh.vercel.app" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>AndyAnh</a> - Quốc Anh - Minh Quân</span>
                     </p>
                     <p className="text-center text-xs opacity-75">
                       © {new Date().getFullYear()} All rights reserved

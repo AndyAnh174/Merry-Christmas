@@ -13,12 +13,54 @@ const CardEditor = ({ card, onBack }) => {
   const cardRef = useRef(null);
   
   const fonts = [
-    { id: 'font-dancing', name: 'Dancing Script', family: "'Dancing Script', cursive" },
-    { id: 'font-great-vibes', name: 'Great Vibes', family: "'Great Vibes', cursive" },
-    { id: 'font-pacifico', name: 'Pacifico', family: "'Pacifico', cursive" },
-    { id: 'font-lobster', name: 'Lobster', family: "'Lobster', cursive" },
-    { id: 'font-sans', name: 'Nunito', family: "'Nunito', sans-serif" },
-    { id: 'font-serif', name: 'Serif', family: "serif" },
+    { 
+      id: 'font-dancing', 
+      name: 'Dancing Script', 
+      family: "'Dancing Script', cursive",
+      sample: 'Chúc mừng Giáng sinh!' 
+    },
+    { 
+      id: 'font-great-vibes', 
+      name: 'Great Vibes', 
+      family: "'Great Vibes', cursive",
+      sample: 'Merry Christmas!' 
+    },
+    { 
+      id: 'font-pacifico', 
+      name: 'Pacifico', 
+      family: "'Pacifico', cursive",
+      sample: 'Happy New Year!' 
+    },
+    { 
+      id: 'font-lobster', 
+      name: 'Lobster', 
+      family: "'Lobster', cursive",
+      sample: 'Season Greetings!' 
+    },
+    { 
+      id: 'font-mountains', 
+      name: 'Mountains of Christmas', 
+      family: "'Mountains of Christmas', cursive",
+      sample: 'Ho Ho Ho!' 
+    },
+    { 
+      id: 'font-berkshire', 
+      name: 'Berkshire Swash', 
+      family: "'Berkshire Swash', cursive",
+      sample: 'Jingle Bells!' 
+    },
+    { 
+      id: 'font-courgette', 
+      name: 'Courgette', 
+      family: "'Courgette', cursive",
+      sample: 'Happy Holidays!' 
+    },
+    { 
+      id: 'font-satisfy', 
+      name: 'Satisfy', 
+      family: "'Satisfy', cursive",
+      sample: 'Peace & Joy!' 
+    }
   ];
 
   // Cấu hình cho React-Quill
@@ -99,17 +141,23 @@ const CardEditor = ({ card, onBack }) => {
           <h3 className="font-christmas text-2xl text-red-500 drop-shadow mb-4">
             Phông chữ
           </h3>
-          <select
-            value={selectedFont}
-            onChange={(e) => setSelectedFont(e.target.value)}
-            className="select select-bordered w-full"
-          >
+          <div className="space-y-4">
             {fonts.map((font) => (
-              <option key={font.id} value={font.id}>
-                {font.name}
-              </option>
+              <button
+                key={font.id}
+                onClick={() => setSelectedFont(font.id)}
+                className={`w-full p-4 rounded-lg border-2 transition-all ${
+                  selectedFont === font.id
+                    ? 'border-red-500 bg-red-50'
+                    : 'border-gray-200 hover:border-red-200'
+                }`}
+                style={{ fontFamily: font.family }}
+              >
+                <div className="text-xl">{font.sample}</div>
+                <div className="text-sm text-gray-500 mt-1">{font.name}</div>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
         {/* Color Selection */}
