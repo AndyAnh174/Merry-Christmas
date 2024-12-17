@@ -4,6 +4,7 @@ import * as htmlToImage from 'html-to-image';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import BurstEffect from '../Effects/BurstEffect';
+import { updateOGTags } from '../../api/ogTags';
 
 const CardEditor = ({ card, onBack }) => {
   const [customText, setCustomText] = useState('<p>Chúc mừng Giáng sinh!</p>');
@@ -36,26 +37,59 @@ const CardEditor = ({ card, onBack }) => {
     'align', 'list', 'bullet'
   ];
 
-  const handleDownload = async () => {
+  // Thêm hàm để tạo và lưu ảnh
+  const generateCardImage = async () => {
     if (cardRef.current) {
       try {
         const dataUrl = await htmlToImage.toPng(cardRef.current);
-        const link = document.createElement('a');
-        link.download = 'christmas-card.png';
-        link.href = dataUrl;
-        link.click();
+        // Cập nhật OG image meta tag
+        document.getElementById('og-image').setAttribute('content', dataUrl);
+        return dataUrl;
       } catch (error) {
-        console.error('Lỗi khi tải ảnh:', error);
+        console.error('Lỗi khi tạo ảnh:', error);
+        return null;
       }
+    }
+  };
+
+  const handleDownload = async () => {
+    const dataUrl = await generateCardImage();
+    if (dataUrl) {
+      const link = document.createElement('a');
+      link.download = 'christmas-card.png';
+      link.href = dataUrl;
+      link.click();
     }
   };
 
   const handleShareFacebook = async () => {
     if (cardRef.current) {
       try {
-        const dataUrl = await htmlToImage.toPng(cardRef.current);
-        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
-        window.open(shareUrl, '_blank', 'width=600,height=400');
+        // Tạo và lưu ảnh vào OG meta tag
+        await generateCardImage();
+
+        // Lấy thông tin thiệp hiện tại
+        const cardId = card.id; // ID của thiệp đang được edit
+        const cardImage = card.thumbnail; // URL hình ảnh của thiệp
+
+        // Tạo URL share với tham số
+        const shareUrl = `https://merry-christmas-snowy.vercel.app/share?card=${encodeURIComponent(cardId)}&image=${encodeURIComponent(cardImage)}&text=${encodeURIComponent(customText)}&font=${encodeURIComponent(selectedFont)}&color=${encodeURIComponent(textColor)}&size=${encodeURIComponent(fontSize)}`;
+
+        // Share lên Facebook với quote
+        const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent('Thiệp Giáng sinh của tôi 🎄')}`;
+        
+        // Mở popup share Facebook
+        const width = 600;
+        const height = 400;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        
+        window.open(
+          fbShareUrl,
+          'facebook-share-dialog',
+          `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width}, height=${height}, top=${top}, left=${left}`
+        );
+
       } catch (error) {
         console.error('Lỗi khi chia sẻ:', error);
       }

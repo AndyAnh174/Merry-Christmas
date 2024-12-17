@@ -160,3 +160,90 @@ body {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes textFade {
+  0%, 80% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Custom range input styles */
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 12px;
+  background: #ddd;
+  border-radius: 6px;
+  background: linear-gradient(to right, 
+    rgba(239, 68, 68, 0.8),
+    rgba(22, 163, 74, 0.8)
+  );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid rgba(239, 68, 68, 0.8);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  border-color: rgb(239, 68, 68);
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(0.9);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Thêm style cho Firefox */
+input[type="range"]::-moz-range-track {
+  height: 12px;
+  background: linear-gradient(to right,
+    rgba(239, 68, 68, 0.8),
+    rgba(22, 163, 74, 0.8)
+  );
+  border-radius: 6px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid rgba(239, 68, 68, 0.8);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+}

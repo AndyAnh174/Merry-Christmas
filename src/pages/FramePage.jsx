@@ -1,171 +1,90 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { FaDownload, FaUpload } from 'react-icons/fa';
+import React, { useState, useRef } from 'react';
+import { FaUpload, FaDownload, FaUndo, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Cropper from 'react-easy-crop';
-import frame1 from '../assets/frame.png';
+import frame1 from '../assets/frame/1.png';
+import frame2 from '../assets/frame/2.png';
+import frame3 from '../assets/frame/3.png';
+import * as htmlToImage from 'html-to-image';
 
-const frames = [
-  {
-    id: 1,
-    name: 'Khung Giáng Sinh 1',
-    path: frame1,
-  },
-];
-
-const createImage = (url) =>
-  new Promise((resolve, reject) => {
-    const image = new Image();
-    image.addEventListener('load', () => resolve(image));
-    image.addEventListener('error', (error) => reject(error));
-    image.src = url;
-  });
-
-const getCroppedImg = async (imageSrc, pixelCrop, rotation = 0) => {
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.save();
-  ctx.translate(canvas.width/2, canvas.height/2);
-  ctx.rotate((rotation * Math.PI) / 180);
-  ctx.translate(-canvas.width/2, -canvas.height/2);
-  
-  ctx.drawImage(
-    image,
-    pixelCrop.x,
-    pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height,
-    0,
-    0,
-    pixelCrop.width,
-    pixelCrop.height
-  );
-
-  ctx.restore();
-
-  return new Promise((resolve) => {
-    canvas.toBlob((file) => {
-      resolve(URL.createObjectURL(file));
-    }, 'image/png');
-  });
-};
+const frames = [frame1, frame2, frame3];
 
 const FramePage = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFrame, setSelectedFrame] = useState(frames[0]);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [showFrame, setShowFrame] = useState(true);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const fileInputRef = useRef(null);
-  const [showFrame, setShowFrame] = useState(true);
+  const frameRef = useRef(null);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadedImage(e.target.result);
-        setCrop({ x: 0, y: 0 });
-        setZoom(1);
-        setRotation(0);
+      reader.onload = () => {
+        setSelectedImage(reader.result);
       };
       reader.readAsDataURL(file);
-    } else {
-      alert('Vui lòng chọn file ảnh hợp lệ (jpg, png, gif)');
     }
   };
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
   const handleDownload = async () => {
-    try {
-      if (!croppedAreaPixels || !uploadedImage) return;
-
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const size = 800;
-      canvas.width = size;
-      canvas.height = size;
-
-      ctx.clearRect(0, 0, size, size);
-
-      const croppedImage = await getCroppedImg(
-        uploadedImage,
-        croppedAreaPixels,
-        rotation
-      );
-      const image = await createImage(croppedImage);
-      ctx.drawImage(image, 0, 0, size, size);
-
-      if (showFrame) {
-        const frameImage = await createImage(selectedFrame.path);
-        ctx.drawImage(frameImage, 0, 0, size, size);
-      }
-
+    if (frameRef.current) {
+      const dataUrl = await htmlToImage.toPng(frameRef.current);
       const link = document.createElement('a');
       link.download = 'christmas-frame.png';
-      link.href = canvas.toDataURL('image/png');
+      link.href = dataUrl;
       link.click();
-    } catch (error) {
-      console.error('Lỗi khi tải ảnh:', error);
-      alert('Có lỗi xảy ra khi tải ảnh. Vui lòng thử lại.');
     }
+  };
+
+  const handleReset = () => {
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setRotation(0);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100">
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-5xl font-christmas text-christmas-red text-center mb-12">
-          Frame Giáng Sinh
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 py-10 px-4">
+      <div className="container mx-auto max-w-6xl">
+        <h1 className="text-4xl md:text-5xl font-christmas text-christmas-red text-center mb-10 drop-shadow-glow">
+          Khung ảnh Giáng sinh
         </h1>
 
+        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Preview Panel */}
-          <div className="lg:col-span-2 bg-white rounded-xl shadow-xl p-8">
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-xl p-4 md:p-8">
             <div 
-              className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden" 
-              style={{ height: '500px' }}
+              ref={frameRef}
+              className="relative aspect-square w-full max-w-2xl mx-auto rounded-lg overflow-hidden"
             >
-              {uploadedImage ? (
+              {selectedImage ? (
                 <div className="relative w-full h-full">
-                  <Cropper
-                    image={uploadedImage}
-                    crop={crop}
-                    zoom={zoom}
-                    rotation={rotation}
-                    aspect={1}
-                    onCropChange={setCrop}
-                    onZoomChange={setZoom}
-                    onRotationChange={setRotation}
-                    onCropComplete={onCropComplete}
-                    objectFit="contain"
-                  />
+                  <div className="absolute inset-0">
+                    <Cropper
+                      image={selectedImage}
+                      crop={crop}
+                      zoom={zoom}
+                      rotation={rotation}
+                      aspect={1}
+                      onCropChange={setCrop}
+                      onZoomChange={setZoom}
+                      onRotationChange={setRotation}
+                    />
+                  </div>
                   {showFrame && (
                     <img
-                      src={selectedFrame.path}
+                      src={selectedFrame}
                       alt="Frame"
-                      className="absolute inset-0 w-full h-full object-contain pointer-events-none frame-overlay"
+                      className="absolute inset-0 w-full h-full object-contain z-10 frame-overlay pointer-events-none"
                     />
                   )}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="btn btn-primary font-christmas text-xl gap-2 mb-4"
-                  >
-                    <FaUpload /> Tải ảnh lên
-                  </button>
-                  <p className="text-gray-500">
-                    Chọn ảnh có kích thước tối thiểu 200x200 pixels
+                <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
+                  <p className="text-gray-500 text-center px-4">
+                    Tải ảnh lên để bắt đầu
                   </p>
                 </div>
               )}
@@ -173,111 +92,105 @@ const FramePage = () => {
           </div>
 
           {/* Control Panel */}
-          <div className="bg-white rounded-xl shadow-xl p-6">
-            <div className="space-y-6">
-              {/* Image Upload */}
-              <div>
-                <label className="font-christmas text-2xl text-christmas-red block mb-4">
-                  Tải ảnh lên
-                </label>
+          <div className="bg-white rounded-xl shadow-xl p-6 space-y-6">
+            {/* Upload Button */}
+            <div>
+              <label className="btn btn-primary w-full gap-2 font-christmas text-xl">
+                <FaUpload /> Tải ảnh lên
                 <input
                   type="file"
-                  ref={fileInputRef}
-                  onChange={handleImageUpload}
-                  accept="image/*"
                   className="hidden"
+                  accept="image/*"
+                  onChange={handleImageUpload}
                 />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="btn btn-primary w-full font-christmas text-xl gap-2"
-                >
-                  <FaUpload /> Chọn ảnh
-                </button>
-              </div>
+              </label>
+            </div>
 
-              {/* Image Controls */}
-              {uploadedImage && (
+            {selectedImage && (
+              <>
+                {/* Frame Selection */}
+                <div>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="font-christmas text-2xl text-red-500 drop-shadow">
+                      Chọn khung
+                    </h3>
+                    <button
+                      onClick={() => setShowFrame(!showFrame)}
+                      className="btn btn-ghost btn-sm gap-2 text-red-500 hover:text-red-600"
+                    >
+                      {showFrame ? <FaEyeSlash /> : <FaEye />}
+                      {showFrame ? 'Ẩn khung' : 'Hiện khung'}
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {frames.map((frame, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedFrame(frame)}
+                        className={`p-2 rounded-lg border-2 transition-all ${
+                          selectedFrame === frame
+                            ? 'border-christmas-red bg-christmas-red/10'
+                            : 'border-gray-200 hover:border-christmas-red/50'
+                        }`}
+                      >
+                        <img src={frame} alt={`Frame ${index + 1}`} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Image Controls */}
                 <div className="space-y-4">
-                  <div>
-                    <label className="font-christmas text-xl text-christmas-red block mb-2">
-                      Thu phóng: {Math.round(zoom * 100)}%
+                  <h3 className="font-christmas text-2xl text-red-500 drop-shadow">
+                    Điều chỉnh ảnh
+                  </h3>
+                  
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Phóng to: {zoom.toFixed(1)}x
                     </label>
                     <input
                       type="range"
-                      value={zoom}
                       min={1}
                       max={3}
                       step={0.1}
-                      onChange={(e) => setZoom(parseFloat(e.target.value))}
-                      className="range range-primary w-full"
+                      value={zoom}
+                      onChange={(e) => setZoom(Number(e.target.value))}
+                      className="w-full h-3 rounded-lg appearance-none cursor-pointer bg-gray-200"
                     />
                   </div>
-                  <div>
-                    <label className="font-christmas text-xl text-christmas-red block mb-2">
+
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Xoay: {rotation}°
                     </label>
                     <input
                       type="range"
-                      value={rotation}
                       min={0}
                       max={360}
-                      step={1}
-                      onChange={(e) => setRotation(parseInt(e.target.value))}
-                      className="range range-primary w-full"
+                      value={rotation}
+                      onChange={(e) => setRotation(Number(e.target.value))}
+                      className="w-full h-3 rounded-lg appearance-none cursor-pointer bg-gray-200"
                     />
                   </div>
-                  <div>
-                    <label className="font-christmas text-xl text-christmas-red block mb-2">
-                      Hiển thị khung
-                    </label>
-                    <input
-                      type="checkbox"
-                      checked={showFrame}
-                      onChange={(e) => setShowFrame(e.target.checked)}
-                      className="toggle toggle-primary"
-                    />
-                  </div>
-                </div>
-              )}
 
-              {/* Frame Selection */}
-              {showFrame && (
-                <div>
-                  <label className="font-christmas text-2xl text-christmas-red block mb-4">
-                    Chọn khung
-                  </label>
-                  <div className="grid grid-cols-2 gap-4">
-                    {frames.map((frame) => (
-                      <div
-                        key={frame.id}
-                        onClick={() => setSelectedFrame(frame)}
-                        className={`cursor-pointer rounded-lg overflow-hidden border-4 transition-all ${
-                          selectedFrame.id === frame.id
-                            ? 'border-christmas-red scale-105'
-                            : 'border-transparent hover:border-christmas-red/50'
-                        }`}
-                      >
-                        <img
-                          src={frame.path}
-                          alt={frame.name}
-                          className="w-full aspect-square object-contain bg-gray-100"
-                        />
-                      </div>
-                    ))}
-                  </div>
+                  <button
+                    onClick={handleReset}
+                    className="btn btn-outline w-full gap-2 font-christmas text-xl text-red-500 hover:text-red-600 hover:bg-red-50"
+                  >
+                    <FaUndo /> Đặt lại
+                  </button>
                 </div>
-              )}
 
-              {/* Download Button */}
-              {uploadedImage && (
+                {/* Download Button */}
                 <button
                   onClick={handleDownload}
-                  className="btn btn-primary w-full font-christmas text-xl gap-2"
+                  className="btn w-full gap-2 font-christmas text-xl bg-gradient-to-r from-red-500 to-green-600 text-white hover:from-red-600 hover:to-green-700"
                 >
                   <FaDownload /> Tải về
                 </button>
-              )}
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>

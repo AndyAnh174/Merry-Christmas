@@ -10,6 +10,7 @@ import SnowEffect from './components/Effects/SnowEffect'
 import LoadingPage from './components/Loading/LoadingPage'
 import AudioPlayer from './components/Audio/AudioPlayer'
 import HistoryPage from './pages/HistoryPage'
+import SharePage from './pages/SharePage'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,6 +50,7 @@ function App() {
                   <Route path="/cards" element={<CardPage />} />
                   <Route path="/frames" element={<FramePage />} />
                   <Route path="/history" element={<HistoryPage />} />
+                  <Route path="/share" element={<SharePage />} />
                 </Routes>
               </div>
 

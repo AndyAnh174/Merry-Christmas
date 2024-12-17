@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Typewriter from 'typewriter-effect';
 
 const Countdown = () => {
-  const christmasDate = new Date('2024-12-17T00:00:00');
+  const christmasDate = new Date('2024-12-25T00:00:00');
   const [showCongrats, setShowCongrats] = useState(false);
   const hasShownCongrats = useRef(false);
 
