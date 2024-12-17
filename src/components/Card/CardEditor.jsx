@@ -3,14 +3,17 @@ import { FaDownload, FaUndo } from 'react-icons/fa';
 import * as htmlToImage from 'html-to-image';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import BurstEffect from '../Effects/BurstEffect';
+import Draggable from 'react-draggable';
 
 const CardEditor = ({ card, onBack }) => {
   const [customText, setCustomText] = useState('<p>Chúc mừng Giáng sinh!</p>');
   const [selectedFont, setSelectedFont] = useState('font-dancing');
   const [textColor, setTextColor] = useState('#D42F2F');
   const [fontSize, setFontSize] = useState('40');
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [textWidth, setTextWidth] = useState(300);
   
   const fonts = [
     { 
@@ -80,6 +83,7 @@ const CardEditor = ({ card, onBack }) => {
 
   const handleDownload = async () => {
     if (cardRef.current) {
+      setIsCapturing(true);
       try {
         const dataUrl = await htmlToImage.toPng(cardRef.current);
         const link = document.createElement('a');
@@ -88,8 +92,14 @@ const CardEditor = ({ card, onBack }) => {
         link.click();
       } catch (error) {
         console.error('Lỗi khi tải ảnh:', error);
+      } finally {
+        setIsCapturing(false);
       }
     }
+  };
+
+  const handleDrag = (e, data) => {
+    setPosition({ x: data.x, y: data.y });
   };
 
   return (
@@ -105,19 +115,34 @@ const CardEditor = ({ card, onBack }) => {
             alt="Card Preview"
             className="w-full h-full object-cover"
           />
-          <div 
-            className="absolute inset-0 flex items-center justify-center p-8"
-            style={{
-              fontFamily: fonts.find(f => f.id === selectedFont)?.family || 'inherit',
-              color: textColor,
-              fontSize: `${fontSize}px`,
-            }}
+          <Draggable
+            position={position}
+            onDrag={handleDrag}
+            disabled={isCapturing}
+            bounds="parent"
           >
             <div 
-              className="quill-content"
-              dangerouslySetInnerHTML={{ __html: customText }}
-            />
-          </div>
+              className={`absolute p-8 cursor-move ${isCapturing ? '' : 'hover:outline hover:outline-dashed hover:outline-2 hover:outline-blue-400'}`}
+              style={{
+                fontFamily: fonts.find(f => f.id === selectedFont)?.family || 'inherit',
+                color: textColor,
+                fontSize: `${fontSize}px`,
+                left: '50%',
+                top: '50%',
+                transform: position.x === 0 && position.y === 0 ? 'translate(-50%, -50%)' : 'none',
+                width: `${textWidth}px`,
+                maxWidth: '90%',
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                overflow: 'visible'
+              }}
+            >
+              <div 
+                className="quill-content"
+                dangerouslySetInnerHTML={{ __html: customText }}
+              />
+            </div>
+          </Draggable>
         </div>
       </div>
 
@@ -128,12 +153,31 @@ const CardEditor = ({ card, onBack }) => {
           <h3 className="font-christmas text-2xl text-red-500 drop-shadow mb-4">
             Nội dung
           </h3>
-          <ReactQuill
-            value={customText}
-            onChange={setCustomText}
-            modules={modules}
-            formats={formats}
-          />
+          <div className="text-black">
+            <ReactQuill
+              value={customText}
+              onChange={setCustomText}
+              modules={modules}
+              formats={formats}
+              theme="snow"
+              style={{ 
+                color: 'black',
+                '& .ql-editor': {
+                  color: 'black'
+                }
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Position Reset Button */}
+        <div>
+          <button
+            onClick={() => setPosition({ x: 0, y: 0 })}
+            className="btn btn-outline w-full gap-2 text-red-500 hover:bg-red-50"
+          >
+            Đặt lại vị trí chữ
+          </button>
         </div>
 
         {/* Font Selection */}
@@ -180,13 +224,29 @@ const CardEditor = ({ card, onBack }) => {
           </h3>
           <input
             type="range"
-            min="20"
-            max="60"
+            min="5"
+            max="100"
             value={fontSize}
             onChange={(e) => setFontSize(e.target.value)}
             className="w-full"
           />
           <div className="text-center mt-2">{fontSize}px</div>
+        </div>
+
+        {/* Độ rộng khung chữ */}
+        <div>
+          <h3 className="font-christmas text-2xl text-red-500 drop-shadow mb-4">
+            Độ rộng khung chữ
+          </h3>
+          <input
+            type="range"
+            min="100"
+            max="800"
+            value={textWidth}
+            onChange={(e) => setTextWidth(Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="text-center mt-2">{textWidth}px</div>
         </div>
 
         {/* Action Buttons */}
