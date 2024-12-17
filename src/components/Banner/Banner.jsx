@@ -1,5 +1,6 @@
 import React from 'react';
 import BurstEffect from '../Effects/BurstEffect';
+import banner from '../../assets/banner/1.png';
 
 const greetings = [
   "Chúc mừng Giáng sinh an lành!",
@@ -23,7 +24,7 @@ const Banner = () => {
         <div className="carousel-item relative w-full">
           <div className="absolute inset-0 bg-gradient-to-r from-christmas-red/50 to-christmas-green/50" />
           <img 
-            src="/christmas-banner.jpg" 
+            src={banner} 
             className="w-full h-full object-cover" 
             alt="Christmas Banner"
           />

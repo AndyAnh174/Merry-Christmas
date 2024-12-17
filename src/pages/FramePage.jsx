@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { FaDownload, FaUpload } from 'react-icons/fa';
 import Cropper from 'react-easy-crop';
-import frame1 from '../assets/frame/pngtree-vietnam-flag-photo-frame-vector-png-image_13857646.png';
+import frame1 from '../assets/frame.png';
 
 const frames = [
   {
@@ -24,33 +24,29 @@ const getCroppedImg = async (imageSrc, pixelCrop, rotation = 0) => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
-  const maxSize = Math.max(image.width, image.height);
-  canvas.width = maxSize;
-  canvas.height = maxSize;
-
-  ctx.translate(maxSize / 2, maxSize / 2);
-  ctx.rotate((rotation * Math.PI) / 180);
-  ctx.translate(-maxSize / 2, -maxSize / 2);
-
-  ctx.drawImage(
-    image,
-    maxSize / 2 - image.width / 2,
-    maxSize / 2 - image.height / 2
-  );
-
-  const data = ctx.getImageData(0, 0, maxSize, maxSize);
   canvas.width = pixelCrop.width;
   canvas.height = pixelCrop.height;
 
-  ctx.putImageData(
-    data,
-    0,
-    0,
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.save();
+  ctx.translate(canvas.width/2, canvas.height/2);
+  ctx.rotate((rotation * Math.PI) / 180);
+  ctx.translate(-canvas.width/2, -canvas.height/2);
+  
+  ctx.drawImage(
+    image,
     pixelCrop.x,
     pixelCrop.y,
     pixelCrop.width,
+    pixelCrop.height,
+    0,
+    0,
+    pixelCrop.width,
     pixelCrop.height
   );
+
+  ctx.restore();
 
   return new Promise((resolve) => {
     canvas.toBlob((file) => {
@@ -98,6 +94,8 @@ const FramePage = () => {
       const size = 800;
       canvas.width = size;
       canvas.height = size;
+
+      ctx.clearRect(0, 0, size, size);
 
       const croppedImage = await getCroppedImg(
         uploadedImage,

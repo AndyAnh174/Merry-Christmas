@@ -1,18 +1,22 @@
 import React from 'react';
+import thiep1 from '../../assets/card/1.png';
+import thiep2 from '../../assets/card/2.png';
+
+
 
 const cards = [
   {
     id: 1,
     title: 'Thiệp Cổ Điển',
     category: 'family',
-    thumbnail: 'https://placehold.co/600x400/red/white?text=Classic+Card',
+    thumbnail: thiep1,
     template: 'classic',
   },
   {
     id: 2,
     title: 'Thiệp Hiện Đại',
     category: 'friend',
-    thumbnail: 'https://placehold.co/600x400/green/white?text=Modern+Card',
+    thumbnail: thiep2,
     template: 'modern',
   },
   // Thêm các mẫu thiệp khác...
