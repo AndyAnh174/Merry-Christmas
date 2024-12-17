@@ -15,7 +15,7 @@ const Navbar = () => {
             <li><Link to="/" className="font-christmas text-xl">Trang chủ</Link></li>
             <li><Link to="/cards" className="font-christmas text-xl">Thiệp</Link></li>
             <li><Link to="/frames" className="font-christmas text-xl">Frame</Link></li>
-            <li><Link to="/music" className="font-christmas text-xl">Nhạc</Link></li>
+            <li><Link to="/history" className="font-christmas text-xl">Lịch sử</Link></li>
           </ul>
         </div>
       </div>
@@ -26,7 +26,7 @@ const Navbar = () => {
           <li><Link to="/" className="font-christmas text-2xl hover:text-christmas-gold transition-colors">Trang chủ</Link></li>
           <li><Link to="/cards" className="font-christmas text-2xl hover:text-christmas-gold transition-colors">Thiệp</Link></li>
           <li><Link to="/frames" className="font-christmas text-2xl hover:text-christmas-gold transition-colors">Frame</Link></li>
-          <li><Link to="/music" className="font-christmas text-2xl hover:text-christmas-gold transition-colors">Nhạc</Link></li>
+          <li><Link to="/history" className="font-christmas text-2xl hover:text-christmas-gold transition-colors">Lịch sử</Link></li>
         </ul>
       </div>
     </div>
