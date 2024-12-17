@@ -16,6 +16,7 @@ const FramePage = () => {
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const frameRef = useRef(null);
+  const [isCapturing, setIsCapturing] = useState(false);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -30,11 +31,21 @@ const FramePage = () => {
 
   const handleDownload = async () => {
     if (frameRef.current) {
-      const dataUrl = await htmlToImage.toPng(frameRef.current);
-      const link = document.createElement('a');
-      link.download = 'christmas-frame.png';
-      link.href = dataUrl;
-      link.click();
+      setIsCapturing(true);
+      
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      try {
+        const dataUrl = await htmlToImage.toPng(frameRef.current);
+        const link = document.createElement('a');
+        link.download = 'christmas-frame.png';
+        link.href = dataUrl;
+        link.click();
+      } catch (err) {
+        console.error('Lỗi khi tải ảnh:', err);
+      } finally {
+        setIsCapturing(false);
+      }
     }
   };
 
@@ -71,6 +82,22 @@ const FramePage = () => {
                       onCropChange={setCrop}
                       onZoomChange={setZoom}
                       onRotationChange={setRotation}
+                      showGrid={!isCapturing}
+                      style={{
+                        containerStyle: {
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: 'transparent',
+                        },
+                        cropAreaStyle: {
+                          border: isCapturing ? 'none' : '1px solid rgba(255, 255, 255, 0.5)',
+                        },
+                        mediaStyle: {
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain',
+                        },
+                      }}
                     />
                   </div>
                   {showFrame && (
