@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { updateOGTags } from '../api/ogTags';
 import { FaDownload } from 'react-icons/fa';
 import * as htmlToImage from 'html-to-image';
 import BurstEffect from '../components/Effects/BurstEffect';
@@ -28,13 +27,6 @@ const SharePage = () => {
       color,
       size
     });
-
-    // Lấy ảnh từ OG meta tag
-    const ogImage = document.getElementById('og-image').getAttribute('content');
-    if (ogImage) {
-      // Cập nhật preview với ảnh đã tạo
-      document.querySelector('.card-preview-image').src = ogImage;
-    }
   }, [searchParams]);
 
   const handleDownload = async () => {
@@ -61,7 +53,7 @@ const SharePage = () => {
           className="relative aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden shadow-xl"
         >
           <img
-            className="card-preview-image w-full h-full object-cover"
+            className="w-full h-full object-cover"
             src={cardData.image || `/cards/${cardData.id}.jpg`}
             alt="Christmas Card"
           />

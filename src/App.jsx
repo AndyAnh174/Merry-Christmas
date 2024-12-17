@@ -41,7 +41,10 @@ function App() {
                         <div className="card bg-gradient-to-br from-christmas-red/5 to-christmas-green/5 shadow-xl">
                           <div className="card-body">
                             <h2 className="card-title font-christmas text-4xl text-christmas-red mb-4">Giới thiệu</h2>
-                            <p className="text-xl">Chào mừng bạn đến với website Giáng sinh của chúng tôi! Nơi đây chúng tôi mang đến không khí Giáng sinh ấm áp và những điều bất ngờ thú vị.</p>
+                            <p className="text-xl text-[#666666]">Chào mừng bạn đến với website Giáng sinh của chúng tôi! Nơi đây chúng tôi mang đến không khí Giáng sinh ấm áp và những điều bất ngờ thú vị. <br></br>
+                              Nơi đây bạn có thể tạo ra những thiệp giáng sinh đẹp mắt và độc đáo.<br></br> 
+                              Đồng thời nếu bạn quá cô đơn thì ở đây với mình nhé. 
+                            </p>
                           </div>
                         </div>
                       </div>

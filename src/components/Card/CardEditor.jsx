@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { FaDownload, FaShare, FaFacebook } from 'react-icons/fa';
+import { FaDownload, FaUndo } from 'react-icons/fa';
 import * as htmlToImage from 'html-to-image';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import BurstEffect from '../Effects/BurstEffect';
-import { updateOGTags } from '../../api/ogTags';
 
 const CardEditor = ({ card, onBack }) => {
   const [customText, setCustomText] = useState('<p>Chúc mừng Giáng sinh!</p>');
@@ -37,61 +36,16 @@ const CardEditor = ({ card, onBack }) => {
     'align', 'list', 'bullet'
   ];
 
-  // Thêm hàm để tạo và lưu ảnh
-  const generateCardImage = async () => {
+  const handleDownload = async () => {
     if (cardRef.current) {
       try {
         const dataUrl = await htmlToImage.toPng(cardRef.current);
-        // Cập nhật OG image meta tag
-        document.getElementById('og-image').setAttribute('content', dataUrl);
-        return dataUrl;
+        const link = document.createElement('a');
+        link.download = 'christmas-card.png';
+        link.href = dataUrl;
+        link.click();
       } catch (error) {
-        console.error('Lỗi khi tạo ảnh:', error);
-        return null;
-      }
-    }
-  };
-
-  const handleDownload = async () => {
-    const dataUrl = await generateCardImage();
-    if (dataUrl) {
-      const link = document.createElement('a');
-      link.download = 'christmas-card.png';
-      link.href = dataUrl;
-      link.click();
-    }
-  };
-
-  const handleShareFacebook = async () => {
-    if (cardRef.current) {
-      try {
-        // Tạo và lưu ảnh vào OG meta tag
-        await generateCardImage();
-
-        // Lấy thông tin thiệp hiện tại
-        const cardId = card.id; // ID của thiệp đang được edit
-        const cardImage = card.thumbnail; // URL hình ảnh của thiệp
-
-        // Tạo URL share với tham số
-        const shareUrl = `https://merry-christmas-snowy.vercel.app/share?card=${encodeURIComponent(cardId)}&image=${encodeURIComponent(cardImage)}&text=${encodeURIComponent(customText)}&font=${encodeURIComponent(selectedFont)}&color=${encodeURIComponent(textColor)}&size=${encodeURIComponent(fontSize)}`;
-
-        // Share lên Facebook với quote
-        const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent('Thiệp Giáng sinh của tôi 🎄')}`;
-        
-        // Mở popup share Facebook
-        const width = 600;
-        const height = 400;
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-        
-        window.open(
-          fbShareUrl,
-          'facebook-share-dialog',
-          `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width}, height=${height}, top=${top}, left=${left}`
-        );
-
-      } catch (error) {
-        console.error('Lỗi khi chia sẻ:', error);
+        console.error('Lỗi khi tải ảnh:', error);
       }
     }
   };
@@ -126,101 +80,80 @@ const CardEditor = ({ card, onBack }) => {
       </div>
 
       {/* Control Panel */}
-      <div className="bg-white rounded-xl shadow-xl p-6">
-        <div className="space-y-6">
-          {/* Text Input */}
-          <div>
-            <label className="font-christmas text-2xl text-christmas-red block mb-2">
-              Lời chúc
-            </label>
-            <div className="bg-white">
-              <ReactQuill
-                value={customText}
-                onChange={setCustomText}
-                modules={modules}
-                formats={formats}
-                className="rounded-lg border"
-              />
-            </div>
-          </div>
+      <div className="bg-white rounded-xl shadow-xl p-6 space-y-6">
+        {/* Text Editor */}
+        <div>
+          <h3 className="font-christmas text-2xl text-red-500 drop-shadow mb-4">
+            Nội dung
+          </h3>
+          <ReactQuill
+            value={customText}
+            onChange={setCustomText}
+            modules={modules}
+            formats={formats}
+          />
+        </div>
 
-          {/* Font Selection */}
-          <div>
-            <label className="font-christmas text-2xl text-christmas-red block mb-2">
-              Font chữ
-            </label>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              {fonts.map(font => (
-                <button
-                  key={font.id}
-                  onClick={() => setSelectedFont(font.id)}
-                  className={`p-3 rounded-lg border-2 transition-all ${
-                    selectedFont === font.id
-                      ? 'border-christmas-red bg-christmas-red/10'
-                      : 'border-gray-200 hover:border-christmas-red/50'
-                  }`}
-                  style={{ fontFamily: font.family }}
-                >
-                  <span className="text-xl">Aa</span>
-                  <p className="text-sm mt-1">{font.name}</p>
-                </button>
-              ))}
-            </div>
-          </div>
+        {/* Font Selection */}
+        <div>
+          <h3 className="font-christmas text-2xl text-red-500 drop-shadow mb-4">
+            Phông chữ
+          </h3>
+          <select
+            value={selectedFont}
+            onChange={(e) => setSelectedFont(e.target.value)}
+            className="select select-bordered w-full"
+          >
+            {fonts.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          {/* Color Picker */}
-          <div>
-            <label className="font-christmas text-2xl text-christmas-red block mb-2">
-              Màu chữ
-            </label>
-            <input
-              type="color"
-              value={textColor}
-              onChange={(e) => setTextColor(e.target.value)}
-              className="w-full h-12 rounded-lg"
-            />
-          </div>
+        {/* Color Selection */}
+        <div>
+          <h3 className="font-christmas text-2xl text-red-500 drop-shadow mb-4">
+            Màu chữ
+          </h3>
+          <input
+            type="color"
+            value={textColor}
+            onChange={(e) => setTextColor(e.target.value)}
+            className="w-full h-12 cursor-pointer rounded-lg"
+          />
+        </div>
 
-          {/* Font Size */}
-          <div>
-            <label className="font-christmas text-2xl text-christmas-red block mb-2">
-              Cỡ chữ: {fontSize}px
-            </label>
-            <input
-              type="range"
-              min="20"
-              max="80"
-              value={fontSize}
-              onChange={(e) => setFontSize(e.target.value)}
-              className="w-full"
-            />
-          </div>
+        {/* Font Size */}
+        <div>
+          <h3 className="font-christmas text-2xl text-red-500 drop-shadow mb-4">
+            Cỡ chữ
+          </h3>
+          <input
+            type="range"
+            min="20"
+            max="60"
+            value={fontSize}
+            onChange={(e) => setFontSize(e.target.value)}
+            className="w-full"
+          />
+          <div className="text-center mt-2">{fontSize}px</div>
+        </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col gap-4">
-            <BurstEffect>
-              <button
-                onClick={handleDownload}
-                className="btn btn-primary font-christmas text-xl gap-2"
-              >
-                <FaDownload /> Tải về
-              </button>
-            </BurstEffect>
-            <BurstEffect>
-              <button
-                onClick={handleShareFacebook}
-                className="btn bg-[#1877F2] hover:bg-[#1877F2]/90 text-white font-christmas text-xl gap-2"
-              >
-                <FaFacebook /> Chia sẻ Facebook
-              </button>
-            </BurstEffect>
-          </div>
-
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-4">
+          <button
+            onClick={handleDownload}
+            className="btn w-full gap-2 font-christmas text-xl bg-gradient-to-r from-red-500 to-green-600 text-white hover:from-red-600 hover:to-green-700"
+          >
+            <FaDownload /> Tải về
+          </button>
           <button
             onClick={onBack}
-            className="w-full btn btn-outline font-christmas text-xl"
+            className="btn btn-outline w-full gap-2 font-christmas text-xl text-red-500 hover:text-red-600 hover:bg-red-50"
           >
-            Quay lại
+            <FaUndo /> Quay lại
           </button>
         </div>
       </div>

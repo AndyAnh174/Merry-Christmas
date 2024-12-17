@@ -76,7 +76,9 @@ const Countdown = () => {
             <span className="countdown font-christmas text-7xl text-christmas-red">
               {completed ? '0' : days}
             </span>
-            <span className="text-2xl mt-3 font-christmas">Ngày</span>
+            <span className="text-2xl mt-3 font-christmas text-black">
+              Ngày
+            </span>
           </div>
         </BurstEffect>
         <BurstEffect>
@@ -84,7 +86,9 @@ const Countdown = () => {
             <span className="countdown font-christmas text-7xl text-christmas-green">
               {completed ? '0' : hours}
             </span>
-            <span className="text-2xl mt-3 font-christmas">Giờ</span>
+            <span className="text-2xl mt-3 font-christmas text-black">
+              Giờ
+            </span>
           </div>
         </BurstEffect>
         <BurstEffect>
@@ -92,7 +96,9 @@ const Countdown = () => {
             <span className="countdown font-christmas text-7xl text-christmas-red">
               {completed ? '0' : minutes}
             </span>
-            <span className="text-2xl mt-3 font-christmas">Phút</span>
+            <span className="text-2xl mt-3 font-christmas text-black">
+              Phút
+            </span>
           </div>
         </BurstEffect>
         <BurstEffect>
@@ -100,7 +106,9 @@ const Countdown = () => {
             <span className="countdown font-christmas text-7xl text-christmas-green">
               {completed ? '0' : seconds}
             </span>
-            <span className="text-2xl mt-3 font-christmas">Giây</span>
+            <span className="text-2xl mt-3 font-christmas text-black">
+              Giây
+            </span>
           </div>
         </BurstEffect>
       </div>
