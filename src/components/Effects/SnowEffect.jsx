@@ -49,7 +49,7 @@ const SnowEffect = () => {
     const snowflakeCount = Math.floor((window.innerWidth * window.innerHeight) / 35000);
     
     for (let i = 0; i < snowflakeCount; i++) {
-      setTimeout(createSnowflake, Math.random() * 8000);
+      setTimeout(createSnowflake, Math.random() * 10000);
     }
 
     const interval = setInterval(() => {

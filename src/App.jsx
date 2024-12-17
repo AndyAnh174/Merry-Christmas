@@ -31,7 +31,7 @@ function App() {
             <>
               <SnowEffect />
               <Navbar />
-              <div className="flex-grow">
+              <div className="flex-grow pt-16">
                 <Routes>
                   <Route path="/" element={
                     <>

@@ -107,11 +107,11 @@ const HistoryPage = () => {
                   <h3 className="text-2xl font-bold text-gray-800">{item.title}</h3>
                   <p className="text-gray-600 text-lg leading-relaxed">{item.content}</p>
                 </div>
-                <div className="relative h-full min-h-[300px]">
+                <div className="h-[300px] md:h-[400px] relative overflow-hidden">
                   <img 
                     src={item.image} 
                     alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-br-xl rounded-bl-xl md:rounded-bl-none md:rounded-tr-xl"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent mix-blend-overlay" />
                 </div>
