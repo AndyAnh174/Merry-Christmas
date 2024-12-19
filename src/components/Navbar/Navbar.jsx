@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
-
+import logoDSC from '../../assets/logo-dsc.png'
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -15,8 +15,13 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-3xl">🎄</span>
-            <span className="text-white font-christmas text-2xl">
+            <span className="text-white font-christmas text-2xl flex items-center gap-2">
               Christmas 2024
+              <img 
+                src={logoDSC} 
+                alt="Christmas Logo" 
+                className="w-auto h-24 object-contain"
+              />
             </span>
           </Link>
 

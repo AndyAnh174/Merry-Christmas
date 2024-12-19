@@ -11,6 +11,7 @@ import LoadingPage from './components/Loading/LoadingPage'
 import AudioPlayer from './components/Audio/AudioPlayer'
 import HistoryPage from './pages/HistoryPage'
 import SharePage from './pages/SharePage'
+import logoDSC from './assets/logo-dsc.png'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -61,8 +62,14 @@ function App() {
               <footer className="bg-gradient-to-r from-christmas-red to-christmas-green py-4 text-white">
                 <div className="container mx-auto px-4">
                   <div className="flex flex-col items-center justify-center space-y-2">
-                    <p className="text-center font-christmas text-xl">
-                      🎄 Merry Christmas 2024 🎄
+                    <p className="text-center font-christmas text-xl flex items-center gap-2">
+                      🎄 Merry Christmas 2024 
+                      <img 
+                        src={logoDSC}
+                        alt="Christmas Logo" 
+                        className="w-auto h-24 object-contain"
+                      />
+                      🎄
                     </p>
                     <p className="text-center text-sm opacity-90">
                       Developed with ❤️ by{' '}

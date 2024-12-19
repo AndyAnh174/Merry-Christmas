@@ -1,18 +1,21 @@
 import React, { useState, useRef } from 'react';
 import { FaUpload, FaDownload, FaUndo, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Cropper from 'react-easy-crop';
-import frame1 from '../assets/frame/1.png';
-import frame2 from '../assets/frame/2.png';
-import frame3 from '../assets/frame/3.png';
-import frame4 from '../assets/frame/4.png';
-import frame5 from '../assets/frame/5.png';
-import frame6 from '../assets/frame/6.png';
-import frame7 from '../assets/frame/7.png';
-import frame8 from '../assets/frame/8.png';
-import frame9 from '../assets/frame/9.png';
+import frame1 from '../assets/frame/dsc1.png'
+import frame2 from '../assets/frame/dsc2.png'
+import frame3 from '../assets/frame/dsc3.png'
+import frame4 from '../assets/frame/1.png';
+import frame5 from '../assets/frame/2.png';
+import frame6 from '../assets/frame/3.png';
+import frame7 from '../assets/frame/4.png';
+import frame8 from '../assets/frame/5.png';
+import frame9 from '../assets/frame/6.png';
+import frame10 from '../assets/frame/7.png';
+import frame11 from '../assets/frame/8.png';
+import frame12 from '../assets/frame/9.png';
 import * as htmlToImage from 'html-to-image';
 
-const frames = [frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8, frame9];
+const frames = [frame1, frame2, frame3, frame4, frame5, frame6, frame7, frame8, frame9, frame10, frame11, frame12];
 
 const FramePage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
